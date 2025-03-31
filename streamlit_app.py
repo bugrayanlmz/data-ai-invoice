@@ -21,29 +21,33 @@ try:
 except ImportError:
     print("python-dotenv bulunamadı. Ortam değişkenleri .env dosyasından yüklenemedi.")
 
-# Göreceli içe aktarma yollarını düzelt
+# Göreceli içe aktarma kodları, Streamlit Cloud için düzenlendi
 try:
-    # Streamlit Cloud ortamında çalışırken
+    # Doğrudan içe aktarma dene
     from document_ai import process_document
     from data_processing import extract_entities, clean_entities
-except ImportError:
-    # Yerel geliştirme ortamında çalışırken
+    print("Modüller doğrudan içe aktarıldı")
+except ImportError as e:
+    print(f"Hata: {e}")
+    print("Alternatif içe aktarma yolları deneniyor...")
+    import sys
+    # Mevcut dizini ekle
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    if current_dir not in sys.path:
+        sys.path.append(current_dir)
+    
+    # src dizinini ekle
+    src_dir = os.path.join(current_dir, "src")
+    if os.path.exists(src_dir) and src_dir not in sys.path:
+        sys.path.append(src_dir)
+        
     try:
-        from src.document_ai import process_document
-        from src.data_processing import extract_entities, clean_entities
-    except ImportError:
-        # Son çare olarak doğrudan içe aktarma deniyoruz
-        import sys
-        import os
-        # Modül yolunu ekleyelim
-        current_dir = os.path.dirname(os.path.abspath(__file__))
-        parent_dir = os.path.dirname(current_dir)
-        if parent_dir not in sys.path:
-            sys.path.append(parent_dir)
-        if current_dir not in sys.path:
-            sys.path.append(current_dir)
         from document_ai import process_document
         from data_processing import extract_entities, clean_entities
+        print("Modüller sys.path eklenerek içe aktarıldı")
+    except ImportError as e:
+        st.error(f"Modüller içe aktarılamadı: {e}")
+        st.stop()
 
 # Sayfa konfigürasyonu
 st.set_page_config(
