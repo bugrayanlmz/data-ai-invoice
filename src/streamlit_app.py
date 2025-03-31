@@ -11,7 +11,6 @@ import streamlit as st
 import pandas as pd
 import tempfile
 import matplotlib.pyplot as plt
-import nbimporter
 
 # Dotenv yüklü değilse atlayacak şekilde düzenleme
 try:
@@ -66,12 +65,45 @@ st.markdown("""
 # Ortam değişkenini kontrol et
 credential_path = os.getenv("GOOGLE_APPLICATION_CREDENTIALS")
 if not credential_path:
-    # Yedek yöntem
-    default_path = "/Users/bugrayanlmz/Desktop/data-ai-project/data-ai-invoice/credentials/data-ai-invoice-454117-86bae93a14c4.json"
-    st.sidebar.warning(f"⚠️ GOOGLE_APPLICATION_CREDENTIALS ortam değişkeni bulunamadı. Varsayılan kimlik dosyası kullanılıyor.")
-    credential_path = default_path
+    # Streamlit Cloud için secrets kullanımı
+    import tempfile
+    
+    # Streamlit secrets'dan kimlik bilgilerini kontrol et
+    if hasattr(st, "secrets") and "google_credentials" in st.secrets:
+        # Streamlit Cloud'da secrets olarak tanımlanmış kimlik bilgilerini geçici dosyaya yaz
+        credentials_content = st.secrets["google_credentials"]
+        with tempfile.NamedTemporaryFile(mode='w', delete=False, suffix='.json') as temp:
+            temp.write(credentials_content)
+            credential_path = temp.name
+            os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = credential_path
+            st.sidebar.success("✅ Google kimlik bilgileri secrets'dan yüklendi")
+    else:
+        st.sidebar.error("❌ Google kimlik bilgileri bulunamadı! Lütfen Streamlit secrets veya ortam değişkenlerini yapılandırın.")
+        st.stop()
+else:
+    os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = credential_path
 
-os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = credential_path
+# Google Cloud proje bilgileri - secrets veya env'den al
+project_id = os.getenv("GOOGLE_CLOUD_PROJECT_ID")
+if not project_id and hasattr(st, "secrets") and "google_cloud_project_id" in st.secrets:
+    project_id = st.secrets["google_cloud_project_id"]
+else:
+    # Varsayılan değer
+    project_id = "data-ai-invoice-454117"
+
+location = os.getenv("GOOGLE_CLOUD_LOCATION")
+if not location and hasattr(st, "secrets") and "google_cloud_location" in st.secrets:
+    location = st.secrets["google_cloud_location"]
+else:
+    # Varsayılan değer
+    location = "eu"
+
+processor_id = os.getenv("GOOGLE_DOCUMENT_AI_PROCESSOR_ID")
+if not processor_id and hasattr(st, "secrets") and "google_document_ai_processor_id" in st.secrets:
+    processor_id = st.secrets["google_document_ai_processor_id"]
+else:
+    # Varsayılan değer
+    processor_id = "1e0be339e088cbdc"
 
 # Ana başlık
 st.title("📄 Fatura/Makbuz Otomatik Veri Çıkarma ve Analizi")
@@ -101,11 +133,6 @@ with col1:
     if uploaded_file:
         st.success("✅ Dosya başarıyla yüklendi!")
     st.markdown('</div>', unsafe_allow_html=True)
-
-# Google Cloud proje bilgileri
-project_id = os.getenv("GOOGLE_CLOUD_PROJECT_ID", "data-ai-invoice-454117")
-location = os.getenv("GOOGLE_CLOUD_LOCATION", "eu")
-processor_id = os.getenv("GOOGLE_DOCUMENT_AI_PROCESSOR_ID", "1e0be339e088cbdc")
 
 if uploaded_file is not None:
     with st.spinner("🔄 Dosya işleniyor..."):

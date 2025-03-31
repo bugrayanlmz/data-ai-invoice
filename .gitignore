@@ -51,4 +51,7 @@ Thumbs.db
 # Geçici dosyalar
 tmp/
 temp/
-*/tmp/* 
+*/tmp/*
+
+# Streamlit secrets
+.streamlit/secrets.toml 
