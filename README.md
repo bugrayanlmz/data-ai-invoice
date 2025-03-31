@@ -70,3 +70,33 @@ Bu proje hem Jupyter Notebook hem de düz Python dosyaları olarak çalışabili
 - Google Document AI işlemcinizin doğru yapılandırıldığından emin olun
 - Kimlik bilgilerinizi her zaman `.env` dosyasında saklayın ve bu dosyayı GitHub'a yüklemeyin
 - Geniş belgeler için doküman işleme süresi daha uzun olabilir
+
+## Streamlit Cloud Deployment
+
+Bu uygulamayı Streamlit Cloud üzerinden deploy etmek için:
+
+1. GitHub repository'nizi Streamlit Cloud'a bağlayın.
+2. Servis hesabı kimlik bilgilerinizi Streamlit Cloud'da ayarlayın:
+
+   - `.streamlit/secrets.toml.example` dosyasını `.streamlit/secrets.toml` olarak kopyalayın
+   - Google Cloud servis hesabı JSON kimlik bilgilerinizi `google_credentials` değişkenine ekleyin
+   - Diğer parametreleri (project_id, location, processor_id) kendi değerlerinizle güncelleyin
+
+3. Streamlit Cloud'da app ayarlarından "Secrets" bölümüne gidin ve aşağıdaki formatta kimlik bilgilerinizi ekleyin:
+
+```toml
+google_credentials = '''
+{
+  "type": "service_account",
+  "project_id": "your-project-id",
+  ... (Servis hesabı JSON içeriğinin tamamı)
+}
+'''
+google_cloud_project_id = "data-ai-invoice-454117"
+google_cloud_location = "eu"
+google_document_ai_processor_id = "1e0be339e088cbdc"
+```
+
+4. Google Cloud servis hesabınıza Document AI API ve Document AI için gerekli izinleri verdiğinizden emin olun.
+
+5. **ÖNEMLİ GÜNCELLEME**: Deploy sırasında "Main file path" olarak `data-ai-invoice/streamlit_app.py` belirtin. (NOT: `src` klasöründeki dosya yerine ana dizindeki dosyayı seçin)
