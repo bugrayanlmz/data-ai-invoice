@@ -54,4 +54,16 @@ temp/
 */tmp/*
 
 # Streamlit secrets
-.streamlit/secrets.toml 
+.streamlit/secrets.toml
+
+# DS_Store dosyaları
+**/.DS_Store
+
+# Python derleme dosyaları
+**/__pycache__/
+*.py[cod]
+*$py.class
+
+# Editör dizinleri
+.devcontainer/
+.ipynb_checkpoints/ 
