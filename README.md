@@ -92,9 +92,9 @@ google_credentials = '''
   ... (Servis hesabı JSON içeriğinin tamamı)
 }
 '''
-google_cloud_project_id = "data-ai-invoice-454117"
-google_cloud_location = "eu"
-google_document_ai_processor_id = "1e0be339e088cbdc"
+google_cloud_project_id = "..."
+google_cloud_location = "..."
+google_document_ai_processor_id = "..."
 ```
 
 4. Google Cloud servis hesabınıza Document AI API ve Document AI için gerekli izinleri verdiğinizden emin olun.
