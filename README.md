@@ -1,73 +1,73 @@
-# Fatura Veri Çıkarma ve Analiz Sistemi
+# Invoice Data Extraction and Analysis System
 
-Google Document AI kullanarak faturalardan otomatik veri çıkarma ve analiz yapan Streamlit tabanlı bir web uygulaması.
+A Streamlit-based web application for automatic data extraction and analysis from invoices using Google Document AI.
 
-## Özellikler
+## Features
 
-- PDF formatındaki faturalardan otomatik veri çıkarma
-- Çıkarılan verilerin tablo ve grafiklerle görselleştirilmesi
-- Entity analizi ve dağılım grafikleri
-- Güven skoru metrikleri
-- Kullanıcı dostu arayüz
+- Automatic data extraction from PDF invoices
+- Visualization of extracted data with tables and charts
+- Entity analysis and distribution graphs
+- Confidence score metrics
+- User-friendly interface
 
-## Kurulum
+## Installation
 
-### Gereksinimler
+### Requirements
 
 - Python 3.8+
-- Google Cloud hesabı
-- Document AI işlemcisi
+- Google Cloud account
+- Document AI processor
 
-### Paketleri Yükleme
+### Installing Packages
 
 ```bash
 pip install -r requirements.txt
 ```
 
-### Ortam Değişkenleri
+### Environment Variables
 
-1. `.env.example` dosyasını `.env` olarak kopyalayın:
+1. Copy `.env.example` file as `.env`:
 
 ```bash
 cp .env.example .env
 ```
 
-2. `.env` dosyasını kendi bilgilerinizle düzenleyin
-3. Google Cloud kimlik bilgilerini `credentials/` klasörüne yerleştirin
+2. Edit the `.env` file with your own information
+3. Place your Google Cloud credentials in the `credentials/` folder
 
-## Çalıştırma
+## Running the Application
 
-### Doğrudan Streamlit ile Çalıştırma
+### Running Directly with Streamlit
 
 ```bash
 streamlit run streamlit_app.py
 ```
 
-## Notlar
+## Notes
 
-- Google Document AI işlemcinizin doğru yapılandırıldığından emin olun
-- Kimlik bilgilerinizi her zaman `.env` dosyasında saklayın ve bu dosyayı GitHub'a yüklemeyin
-- Geniş belgeler için doküman işleme süresi daha uzun olabilir
+- Make sure your Google Document AI processor is properly configured
+- Always store your credentials in the `.env` file and do not upload this file to GitHub
+- Document processing time may be longer for large documents
 
 ## Streamlit Cloud Deployment
 
-Bu uygulamayı Streamlit Cloud üzerinden deploy etmek için:
+To deploy this application on Streamlit Cloud:
 
-1. GitHub repository'nizi Streamlit Cloud'a bağlayın.
-2. Servis hesabı kimlik bilgilerinizi Streamlit Cloud'da ayarlayın:
+1. Connect your GitHub repository to Streamlit Cloud.
+2. Configure your service account credentials in Streamlit Cloud:
 
-   - `.streamlit/secrets.toml.example` dosyasını `.streamlit/secrets.toml` olarak kopyalayın
-   - Google Cloud servis hesabı JSON kimlik bilgilerinizi `google_credentials` değişkenine ekleyin
-   - Diğer parametreleri (project_id, location, processor_id) kendi değerlerinizle güncelleyin
+   - Copy `.streamlit/secrets.toml.example` file as `.streamlit/secrets.toml`
+   - Add your Google Cloud service account JSON credentials to the `google_credentials` variable
+   - Update other parameters (project_id, location, processor_id) with your own values
 
-3. Streamlit Cloud'da app ayarlarından "Secrets" bölümüne gidin ve aşağıdaki formatta kimlik bilgilerinizi ekleyin:
+3. Go to the "Secrets" section in Streamlit Cloud app settings and add your credentials in the following format:
 
 ```toml
 google_credentials = '''
 {
   "type": "service_account",
   "project_id": "your-project-id",
-  ... (Servis hesabı JSON içeriğinin tamamı)
+  ... (Complete service account JSON content)
 }
 '''
 google_cloud_project_id = "data-ai-invoice-454117"
@@ -75,6 +75,6 @@ google_cloud_location = "eu"
 google_document_ai_processor_id = "1e0be339e088cbdc"
 ```
 
-4. Google Cloud servis hesabınıza Document AI API ve Document AI için gerekli izinleri verdiğinizden emin olun.
+4. Make sure your Google Cloud service account has the necessary permissions for Document AI API.
 
-5. **ÖNEMLİ**: Deploy sırasında "Main file path" olarak `streamlit_app.py` belirtin.
+5. **IMPORTANT**: Specify `streamlit_app.py` as the "Main file path" during deployment.
