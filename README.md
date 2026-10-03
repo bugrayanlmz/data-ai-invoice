@@ -1,80 +1,45 @@
-# Invoice Data Extraction and Analysis System
+# Invoice Data Extraction
 
-A Streamlit-based web application for automatic data extraction and analysis from invoices using Google Document AI.
+A Python and Streamlit application that extracts structured information from PDF invoices using Google Cloud Document AI.
 
 ## Features
 
-- Automatic data extraction from PDF invoices
-- Visualization of extracted data with tables and charts
-- Entity analysis and distribution graphs
-- Confidence score metrics
-- User-friendly interface
+- Upload a PDF and inspect extracted entities and raw text.
+- View confidence scores, summary metrics, and entity tables.
+- Explore entity distributions with bar and pie charts.
 
-## Installation
+Built with Streamlit, Google Cloud Document AI, Pandas, and Matplotlib.
 
-### Requirements
+## Run Locally
 
-- Python 3.8+
-- Google Cloud account
-- Document AI processor
-
-### Installing Packages
+Requires Python, a Google Cloud project with the Document AI API enabled, an invoice processor, and service account credentials authorized to use it.
 
 ```bash
+git clone https://github.com/bugrayanlmz/data-ai-invoice.git
+cd data-ai-invoice
+python3 -m venv venv
+source venv/bin/activate
 pip install -r requirements.txt
 ```
 
-### Environment Variables
+The activation command above is for macOS/Linux. Create a root `.env` file pointing to your service account JSON:
 
-1. Copy `.env.example` file as `.env`:
-
-```bash
-cp .env.example .env
+```env
+GOOGLE_APPLICATION_CREDENTIALS=/absolute/path/to/credentials.json
 ```
 
-2. Edit the `.env` file with your own information
-3. Place your Google Cloud credentials in the `credentials/` folder
+Create `.streamlit/secrets.toml` with your processor settings:
 
-## Running the Application
+```toml
+google_cloud_project_id = "your-project-id"
+google_cloud_location = "eu"
+google_document_ai_processor_id = "your-processor-id"
+```
 
-### Running Directly with Streamlit
+Set the location to your processor's region. Leave `GOOGLE_CLOUD_PROJECT_ID`, `GOOGLE_CLOUD_LOCATION`, and `GOOGLE_DOCUMENT_AI_PROCESSOR_ID` unset in your environment and `.env`: the current code replaces their values with hard-coded defaults when they are set. The Streamlit secrets configuration above avoids this issue.
 
 ```bash
 streamlit run streamlit_app.py
 ```
 
-## Notes
-
-- Make sure your Google Document AI processor is properly configured
-- Always store your credentials in the `.env` file and do not upload this file to GitHub
-- Document processing time may be longer for large documents
-
-## Streamlit Cloud Deployment
-
-To deploy this application on Streamlit Cloud:
-
-1. Connect your GitHub repository to Streamlit Cloud.
-2. Configure your service account credentials in Streamlit Cloud:
-
-   - Copy `.streamlit/secrets.toml.example` file as `.streamlit/secrets.toml`
-   - Add your Google Cloud service account JSON credentials to the `google_credentials` variable
-   - Update other parameters (project_id, location, processor_id) with your own values
-
-3. Go to the "Secrets" section in Streamlit Cloud app settings and add your credentials in the following format:
-
-```toml
-google_credentials = '''
-{
-  "type": "service_account",
-  "project_id": "your-project-id",
-  ... (Complete service account JSON content)
-}
-'''
-google_cloud_project_id = "data-ai-invoice-454117"
-google_cloud_location = "eu"
-google_document_ai_processor_id = "1e0be339e088cbdc"
-```
-
-4. Make sure your Google Cloud service account has the necessary permissions for Document AI API.
-
-5. **IMPORTANT**: Specify `streamlit_app.py` as the "Main file path" during deployment.
+Open the local URL printed by Streamlit and upload an invoice PDF. Keep credentials and secrets out of version control.
